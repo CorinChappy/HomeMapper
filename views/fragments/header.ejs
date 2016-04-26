@@ -1,0 +1,40 @@
+<%
+	var isLink = function(url){
+		var pattern = /^((http|https|ftp):\/\/)/;
+		return pattern.test(url);
+	}
+
+    var displayMenu = function(menu){
+        if(menu!==undefined || menu.constructor === Array){
+            %><ul><%
+                for(var i=0; i<menu.length; i++) {
+					var url		= isLink(menu[i].link)	? menu[i].link : global.base+menu[i].link;
+					var cls		= (menu[i].class!=null)	? menu[i].class : '';
+					var trg		= (menu[i].blank)		? ' target="_blank"' : '';
+					var act		= ((global.base+menu[i].link) == global.urlPg) ? 'active' : '';
+					%>
+					<li><a href="<%- url %>" class="<%- cls %> <%- act %>"<%- trg %>><%- menu[i].label %></a><%
+						if(menu[i].menu !== undefined){
+							displayMenu(menu[i].menu);
+						}
+					%></li>
+                <% }
+            %></ul><%
+        }
+    }
+%>
+
+<header>
+	<div class="title">
+		<h1><a href="<%= global.base %>/"><img src="<%= global.base %>/img/24-white.png" alt="" /> <%= stg.title %></a></h1>
+	</div>
+	<div class="menu left">
+		<% displayMenu(menu) %>
+	</div>
+	<div class="menu">
+		<ul>
+			<li><a href="#">Login</a></li>
+			<li><a href="#">Sign Up</a></li>
+		</ul>
+	</div>
+</header>

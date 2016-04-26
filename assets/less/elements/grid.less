@@ -1,0 +1,67 @@
+//main:../style.less
+
+.columns{
+	width: 100%;
+	position: relative;
+	.clearfix;
+
+	> div{
+		float: left;
+		display: block;
+		position: relative;
+		min-height: 1px;
+	}
+
+	@divisions	: full, half, third, quarter, fifth, sixth;
+	@numbers	: one, two, three, four, five, six;
+
+	.generate-columns-fraction(@division, @division-n, @size: false, @i: 1) when (@i <= length(@numbers)){
+		@number: extract(@numbers, @i);
+		@calc-width: 100%/@division-n*@i;
+		//check size is bellow 100%
+		& when (@calc-width <= 100){
+			& when (@size = false){
+				& .@{number}-@{division}{
+					width: @calc-width;
+				}
+			}
+			& when not(@size = false){
+				& .@{size}-@{number}-@{division}{
+					width: @calc-width;
+				}
+			}
+		}
+		.generate-columns-fraction(@division, @division-n, @size, (@i+1));
+	}
+	.generate-columns-size(@size: false, @i: 1) when (@i <= length(@divisions)){
+		@division: extract(@divisions, @i);
+		& when (@size = false){
+			& .@{division}{
+				width: 100%/@i;
+			}
+			.generate-columns-fraction(@division, @i);
+		}
+		& when not(@size = false){
+			& .@{size}-@{division}{
+				width: 100%/@i;
+			}
+			.generate-columns-fraction(@division, @i, @size);
+		}
+		.generate-columns-size(@size, (@i + 1));
+	}
+	.generate-columns(@i: 0) when (@i <= length(@sizes)){
+		& when (@i = 0){
+			.generate-columns-size();
+		}
+		& when (@i > 0){
+			@size: extract(@sizes, @i);
+			@size-select : "size-@{size}";
+			@media screen and (min-width: @@size-select ){
+				.generate-columns-size(@size);
+			}
+		}
+		.generate-columns((@i + 1));
+	}
+
+	.generate-columns;
+}

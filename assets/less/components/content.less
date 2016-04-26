@@ -1,0 +1,196 @@
+//main: ../style.less
+
+body, html{
+	margin: 0;
+	padding: 0;
+	background: #eeeeee;
+	color: @font-color;
+    font-family: @font-main;
+	font-size: @font-size;
+	line-height: @line-height;
+	min-width: 320px;
+	height: 100%;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+*:focus {
+	outline: 0 none !important;
+}
+
+a{
+    text-decoration: none;
+	color: @accent;
+	&:hover{
+		text-decoration: underline;
+		color: lighten(@accent, 10);
+	}
+}
+
+// clearfix function and class
+.clearfix{
+    &::after{
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+    }
+}
+
+.content{
+	min-height: 100%;
+	width: 100%;
+	position: relative;
+	z-index: 1;
+	padding-top: @unit*2;
+
+	&.centered{
+		height: 100vh;
+		display: flex; // only
+		overflow-y: auto;
+		padding-top: @unit*2;
+
+		& > .focusbox{
+			margin: auto;
+			position: relative;
+			width: 100%;
+			max-width: @size-sm;
+
+			& > .box{
+				margin-left: 0;
+				margin-right: 0;
+			}
+		}
+	}
+
+	&.overflow{
+		overflow-y: hidden;
+		height: 100%;
+
+		& > .window{
+			position: absolute;
+			top: @unit*2;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+	}
+}
+
+.align-center{
+	text-align: center;
+}
+.align-left{
+	text-align: left;
+}
+.align-right{
+	text-align: right;
+}
+
+h1,h2,h3,h4,h5,h6{
+	font-family: @font-heading;
+	padding: 0;
+	color: @font-color;
+	margin: 0 0 @unit 0;
+
+	+ h1,+ h2,+ h3,+ h4,+ h5,+ h6{
+		margin-top: -@unit;
+	}
+}
+h1{
+	font-size: @unit*2.5;
+	line-height: @unit*3.5;
+	font-weight: normal;;
+}
+h2{
+	font-size: @unit*1.5;
+	line-height: @unit*2;
+}
+h3{
+	font-size: @unit*1;
+	line-height: @unit*2;
+}
+h4{
+	font-size: @unit*0.75;
+	line-height: @unit*1;
+	color: @font-color;
+	font-family: @font-main;
+}
+h5{
+	font-size: @unit*0.5;
+	line-height: @unit*1;
+	color: @font-color;
+	font-family: @font-main;
+}
+h6{
+	font-size: @unit*0.5;
+	line-height: @unit*1;
+	color: @font-color;
+	font-family: @font-main;
+}
+
+p, ul, ol, blockquote, code{
+	margin: 0 0 @unit 0;
+}
+
+.profile{
+	.border-radius(50%);
+	border: 0 none;
+}
+
+.box{
+	display: block;
+	background: white;
+	width: 100%;
+	max-width: @size-sm;
+	padding: @unit*2;
+	margin: @unit;
+	.border-radius(3px);
+	.gradient(linear; rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.0));
+	.box-shadow(0 3px 5px 0 rgba(0, 0, 0, 0.10));
+
+	& > *:last-child{
+		margin-bottom: 0;
+	}
+}
+
+.page{
+	.box;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: @size-md;
+}
+
+#homemap{
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	z-index: -1;
+	opacity: 0.33;
+	cursor: default;
+
+	.protect{
+		background: transparent;
+		position: absolute;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 1;
+		cursor: default;
+	}
+}
+
+#map{
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}

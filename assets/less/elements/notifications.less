@@ -1,0 +1,65 @@
+//main : ../style.less
+
+.notifications{
+	list-style-type: none;
+	margin: 0;
+	padding: 0 0 @unit 0;
+	position: relative;
+
+	li{
+		background: @notification;
+		padding: @unit/2 @unit/2 @unit/2 @unit + 21px;
+		margin-bottom: @unit/2;
+		position: relative;
+		color: white;
+		display: block;
+
+		&::before{
+			font-family: FontAwesome;
+			content: "\f05a";
+			margin-right: @unit/2;
+			display: inline-block;
+			text-align: center;
+			width: 1.28571em;
+			line-height: 1.28571em;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			padding: @unit/2;
+		}
+	}
+
+	li:last-child{
+		margin-bottom: 0;
+	}
+
+	li:first-letter{
+		text-transform: uppercase;
+	}
+
+	.info{
+		background: @info;
+	}
+
+	.warning{
+		background: @warning;
+		&::before{
+			content: "\f071";
+		}
+	}
+
+	.error{
+		background: @error;
+		&::before{
+			content: "\f06a";
+		}
+	}
+
+	.success{
+		background: @success;
+		&::before{
+			content: "\f058";
+		}
+	}
+}

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test</title>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css">
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+    <link rel="stylesheet" href="libs/sidebar/leaflet-sidebar.min.css">
+    <script src="libs/sidebar/leaflet-sidebar.min.js"></script>
+
+    <script src="libs/heatmap.min.js"></script>
+    <script src="libs/leaflet-heatmap.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="libs/awesome-markers/leaflet.awesome-markers.css">
+    <script src="libs/awesome-markers/leaflet.awesome-markers.min.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body, #map {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar collapsed">
+        <!-- Nav -->
+        <ul class="sidebar-tabs" role="tablist">
+            <li><a href="#layers" role="tab"><span class="fa fa-bars">&nbsp;</span></a></li>
+            <li><a href="#filter" role="tab"><span class="fa fa-filter">&nbsp;</span></a></li>
+        </ul>
+
+        <!-- Pane -->
+        <div class="sidebar-content active">
+            <div class="sidebar-pane" id="layers">
+                <div id="sidebar-layers">
+                    <h3>Data to show</h3>
+                    <p>
+                        <i class="fa fa-map-o"></i> Heatmap: <input type="checkbox" checked>
+                    </p>
+                    <p>
+                        <i class="fa fa-home"></i> Houses: <input type="checkbox" checked>
+                    </p>
+                    <p>
+                        <i class="fa fa-shopping-cart"></i> Shops: <input type="checkbox" checked>
+                    </p>
+                    <p>
+                        <i class="fa fa-cutlery"></i> Restaurants: <input type="checkbox" checked>
+                    </p>
+                    <p>
+                        <i class="fa fa-bus"></i> Bus: <input type="checkbox" checked>
+                    </p>
+                </div>
+            </div>
+
+            <div class="sidebar-pane" id="filter">
+                <div id="sidebar-filter">
+                    <h3>Filter house prices</h3>
+                    <p style="text-align: center;">
+                         <input type="range" min="100000" max="700000" value="100000">
+                        to <input type="range" min="100000" max="700000" value="700000">
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="map" class="sidebar-map"></div>
+
+</body>
+
+<script>
+var map = new L.map("map", {
+    // Default centre and zoom
+    center : [ 52.18935168521872, -2.2124576568603516 ], 
+    zoom : 15
+});
+
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+    maxZoom: 16
+}).addTo(map);
+
+var sidebar = L.control.sidebar("sidebar").addTo(map);
+map.on("mousedown", function(){
+    if(!L.DomUtil.hasClass(sidebar._sidebar, "collapsed")){
+        sidebar.close();
+    }
+});
+
+function generatePointInBounds(bounds){
+    var east = bounds.getEast(),
+        west = bounds.getWest(),
+        north = bounds.getNorth(),
+        south = bounds.getSouth();
+    var latlng;
+
+    do {
+        latlng = L.latLng({
+            lat : north + (Math.random() * (south - north)),
+            lng : west + (Math.random() * (east - west))
+        });
+    } while (!bounds.contains(latlng));
+    return latlng;
+}
+
+
+var heatmap = {
+    max : 100,
+    min : 0,
+    getValue : function (min, max) {
+        return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
+    },
+    getPosition : function(bounds){
+        return generatePointInBounds(bounds);
+    },
+    generatePoint : function(bounds){
+        var point = this.getPosition(bounds);
+        point.value = this.getValue();
+        return point;
+    },
+    generatePoints : function (num, bounds) {
+        num = num || 100;
+        bounds = bounds || map.getBounds().pad(0.2);
+
+        var result = [];
+        while(num--){
+            result.push(this.generatePoint(bounds));
+        }
+        return result;
+    }
+};
+
+var hmp = heatmap.generatePoints();
+
+var heatmapLayer = new HeatmapOverlay({
+    radius: 150,
+    useLocalExtrema: false,
+    valueField: "value"
+});
+
+
+heatmapLayer.setData({data: hmp, max : heatmap.max});
+
+map.addLayer(heatmapLayer);
+
+// hmp.forEach(function(m){
+//     L.marker(m).bindPopup("<pre>" + JSON.stringify(m, null, 2) + "</pre>").addTo(map);
+//})
+
+var markers = {
+    min : 100000,
+    max : 700000,
+    getValue : heatmap.getValue,
+    getPosition : heatmap.getPosition,
+    generatePoint : heatmap.generatePoint,
+    generatePoints : heatmap.generatePoints,
+
+    types : {
+        home : L.AwesomeMarkers.icon({
+            prefix : "fa",
+            icon: "home",
+            markerColor: "orange"
+        }),
+        shop : L.AwesomeMarkers.icon({
+            prefix : "fa",
+            icon: "shopping-cart",
+            markerColor: "green"
+        }),
+        resturant : L.AwesomeMarkers.icon({
+            prefix : "fa",
+            icon: "cutlery",
+            markerColor: "blue"
+        }),
+        bus : L.AwesomeMarkers.icon({
+            prefix : "fa",
+            icon: "bus",
+            markerColor: "red"
+        })
+    }
+};
+
+var marks_home = markers.generatePoints(300).forEach(function(m){
+    return L.marker(m, {icon : markers.types.home}).bindPopup((function(){
+        return "Current owner: Stephen Redbridge<br>" +
+            "Asking price: " + m.value.toLocaleString("en-gb", { currency : "GBP", currencyDisplay : "symbol", style : "currency" });
+    })()).addTo(map);
+});
+
+var marks_shop = markers.generatePoints(30).forEach(function(m){
+    return L.marker(m, {icon : markers.types.shop}).bindPopup((function(){
+        return "Greg Bright's Convinence Store";
+    })()).addTo(map);
+});
+
+var marks_resturant = markers.generatePoints(20).forEach(function(m){
+    return L.marker(m, {icon : markers.types.resturant}).bindPopup((function(){
+        return "Cafe Paradise";
+    })()).addTo(map);
+});
+
+var marks_bus = markers.generatePoints(30).forEach(function(m){
+    return L.marker(m, {icon : markers.types.bus}).bindPopup((function(){
+        return "Bus Stop";
+    })()).addTo(map);
+});
+
+
+</script>
+
+
+</html>

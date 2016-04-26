@@ -1,0 +1,94 @@
+// main : style.less
+
+.placeholder(@rules) {
+    &::-webkit-input-placeholder {
+        @rules();
+    }
+    &:-moz-placeholder {
+        @rules();
+    }
+    &::-moz-placeholder {
+        @rules();
+    }
+    &:-ms-input-placeholder {
+        @rules();
+    }
+}
+
+.border-radius(@radius: 5px) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius:    @radius;
+	border-radius:         @radius;
+
+	-moz-background-clip:    padding;
+	-webkit-background-clip: padding-box;
+	background-clip:         padding-box;
+}
+
+.box-shadow(@string) {
+	-webkit-box-shadow:	@string;
+	-moz-box-shadow:	@string;
+	box-shadow:			@string;
+}
+
+.transition(@transition) {
+	-webkit-transition:	@transition;
+	-moz-transition:	@transition;
+	-ms-transition:		@transition;
+	-o-transition:		@transition;
+	transition:			@transition;
+}
+
+.transform(@string){
+	-webkit-transform:	@string;
+	-moz-transform:		@string;
+	-ms-transform:		@string;
+	-o-transform:		@string;
+	transform:			@string;
+}
+
+.perspective(@value: 1000) {
+	-webkit-perspective:@value;
+	-moz-perspective:	@value;
+	-ms-perspective:	@value;
+	perspective:		@value;
+}
+
+.filter (@string){
+	-webkit-filter:	@string;
+	-moz-filter:	@string;
+	-ms-filter:		@string;
+	filter:			@string;
+}
+
+.keyframes (@name; @arguments) {
+	@-moz-keyframes @name { @arguments(); }
+	@-webkit-keyframes @name { @arguments(); }
+	@keyframes @name { @arguments(); }
+}
+
+.animation (@arguments) {
+	-webkit-animation: @arguments;
+	-moz-animation: @arguments;
+	animation: @arguments;
+}
+
+.user-select (@string) {
+	-webkit-user-select:@string;
+	-khtml-user-select:	@string;
+	-moz-user-select:	@string;
+	-o-user-select:		@string;
+	user-select:		@string;
+}
+
+.gradient(@type; @colors; @dir: 0deg; @prefixes: webkit, moz, ms, o; @index: length(@prefixes)) when (@index > 0) {
+    .gradient(@type; @colors; @dir; @prefixes; (@index - 1));
+
+    @prefix  : extract(@prefixes, @index);
+    @dir-old : 90 - (@dir);
+
+    background-image: ~"-@{prefix}-@{type}-gradient(@{dir-old}, @{colors})";
+  	& when ( @index = length(@prefixes) ) {
+        background-image: ~"@{type}-gradient(@{dir}, @{colors})";
+    }
+}

@@ -1,0 +1,25 @@
+<% layout("layouts/default") %>
+
+<div class="content centered">
+	<div class="focusbox">
+		<h1 class="align-center"><img src="<%= global.base %>/img/64-black.png" alt="" /> <%= stg.title %></h1>
+		<p><%= stg.moto %><p>
+		<div class="box">
+			<h3>Enter you point of interest</h3>
+			<form  method="post" id="location_form">
+				<div class="input-container">
+					<div class="icon"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i></div>
+					<input type="text" id="location_input" name="location" value="" placeholder="location">
+				</div>
+				<input type="hidden" id="location_lat_input" name="lat" value="">
+				<input type="hidden" id="location_lng_input" name="lng" value="">
+				<button class="full" type="submit" name="button">Go</button>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAex4St4qNjt9vUlMXGpouV6ttBCIMJfYE&libraries=places"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<script src="<%= global.base %>/js/homemap.js" charset="utf-8"></script>
+	<div id="homemap"><div class="protect"></div></div>
+</div>

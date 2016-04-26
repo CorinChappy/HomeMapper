@@ -1,0 +1,9 @@
+{
+    "name"		: "homemapper.session",
+    "secret"	: "F4A49E595AED47F9495348A72282D",
+    "resave"	: false,
+    "saveUninitialized" : false,
+    "cookie": {
+		"maxAge": 86400000
+	}
+}

@@ -1,0 +1,68 @@
+<% layout("layouts/default") %>
+
+<div class="content overflow">
+	<div class="window">
+
+		<!-- Sidebar -->
+		<div id="sidebar" class="sidebar collapsed">
+			<!-- Nav -->
+			<ul class="sidebar-tabs" role="tablist">
+				<li><a href="#locations" role="tab"><span class="fa fa-fw fa-map-marker">&nbsp;</span></a></li>
+				<li><a href="#layers" role="tab"><span class="fa fa-fw fa-database">&nbsp;</span></a></li>
+				<li><a href="#filter" role="tab"><span class="fa fa-fw fa-filter">&nbsp;</span></a></li>
+				<li><a href="#money" role="tab"><span class="fa fa-fw fa-money">&nbsp;</span></a></li>
+			</ul>
+
+			<!-- Pane -->
+			<div class="sidebar-content active">
+				<div class="sidebar-pane" id="layers">
+					<div id="sidebar-layers">
+						<h3>Data to show</h3>
+						<p>
+							<i class="fa fa-map-o"></i> Heatmap: <input type="checkbox" checked>
+						</p>
+						<p>
+							<i class="fa fa-home"></i> Houses: <input type="checkbox" checked>
+						</p>
+						<p>
+							<i class="fa fa-shopping-cart"></i> Shops: <input type="checkbox" checked>
+						</p>
+						<p>
+							<i class="fa fa-cutlery"></i> Restaurants: <input type="checkbox" checked>
+						</p>
+						<p>
+							<i class="fa fa-bus"></i> Bus: <input type="checkbox" checked>
+						</p>
+					</div>
+				</div>
+
+				<div class="sidebar-pane" id="filter">
+					<div id="sidebar-filter">
+						<h3>Filter house prices</h3>
+						<p style="text-align: center;">
+							 <input type="range" min="100000" max="700000" value="100000">
+							to <input type="range" min="100000" max="700000" value="700000">
+						</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div id="map" class="sidebar-map"></div>
+	</div>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+	<link rel="stylesheet" href="<%= global.base%>/sidebar/leaflet-sidebar.min.css">
+	<script src="<%= global.base%>/sidebar/leaflet-sidebar.min.js"></script>
+
+	<script src="<%= global.base%>/heatmap.min.js"></script>
+	<script src="<%= global.base%>/leaflet-heatmap.js"></script>
+
+	<link rel="stylesheet" href="<%= global.base%>/awesome-markers/leaflet.awesome-markers.css">
+	<script src="<%= global.base%>/awesome-markers/leaflet.awesome-markers.min.js"></script>
+
+	<script src="<%= global.base%>/js/map.js" charset="utf-8"></script>
+</div>
