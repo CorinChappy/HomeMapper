@@ -1,5 +1,5 @@
 {
-  "name": "opendata project",
+  "name": "opendata_project",
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.14.2",
@@ -7,6 +7,6 @@
     "ejs-mate": "^2.3.0",
     "express": "^4.13.3",
     "express-session": "^1.13.0",
-    "mongoose": "^4.3.7",
+    "mongoose": "^4.3.7"
   }
 }

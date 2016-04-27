@@ -1,6 +1,6 @@
 var map = new L.map("map", {
     // Default centre and zoom
-    center : [ 52.18935168521872, -2.2124576568603516 ],
+    center : [ 50.93519, -1.39571 ],//[ 52.18935168521872, -2.2124576568603516 ],
     zoom : 15
 });
 
@@ -70,7 +70,7 @@ var heatmapLayer = new HeatmapOverlay({
 
 heatmapLayer.setData({data: hmp, max : heatmap.max});
 
-map.addLayer(heatmapLayer);
+//map.addLayer(heatmapLayer);
 
 // hmp.forEach(function(m){
 //     L.marker(m).bindPopup("<pre>" + JSON.stringify(m, null, 2) + "</pre>").addTo(map);
@@ -112,8 +112,49 @@ var marks_home = markers.generatePoints(300).forEach(function(m){
     return L.marker(m, {icon : markers.types.home}).bindPopup((function(){
         return "Current owner: Stephen Redbridge<br>" +
             "Asking price: " + m.value.toLocaleString("en-gb", { currency : "GBP", currencyDisplay : "symbol", style : "currency" });
-    })()).addTo(map);
+    })())//.addTo(map);
 });
+
+function convertToGoogleLatLng(bounds){
+    return {
+        east : bounds.getEast(),
+        west : bounds.getWest(),
+        north : bounds.getNorth(),
+        south : bounds.getSouth()
+    };
+}
+
+function convertGoogleLocationToLatLng(loc){
+    return [loc.lat(), loc.lng()];
+}
+
+var nService = new google.maps.places.PlacesService(document.createElement("div"));
+
+
+
+
+function abc(){
+    var request = {
+        bounds : convertToGoogleLatLng(map.getBounds()),
+        types : ['restaurant']
+    };
+    nService.nearbySearch(request, function(res){
+        console.log(res);
+        res.forEach(function(a){
+            var l = a.geometry.location;
+            L.marker(convertGoogleLocationToLatLng(l), {icon : markers.types.resturant}).bindPopup("<strong>" + a.name + "</strong>").addTo(map);
+        });
+    })
+}
+
+map.on('moveend', function(){
+    abc();
+});
+
+abc();
+
+
+/*
 
 var marks_shop = markers.generatePoints(30).forEach(function(m){
     return L.marker(m, {icon : markers.types.shop}).bindPopup((function(){
@@ -132,3 +173,7 @@ var marks_bus = markers.generatePoints(30).forEach(function(m){
         return "Bus Stop";
     })()).addTo(map);
 });
+
+*/
+
+
