@@ -15,6 +15,16 @@
 
 			<!-- Pane -->
 			<div class="sidebar-content active">
+
+				<div class="sidebar-pane" id="locations">
+					<div id="sidebar-locations">
+						<div class="input-container">
+							<div class="icon"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i></div>
+							<input type="text" id="location_input" name="location" value="<%= location %>" placeholder="location">
+						</div>
+					</div>
+				</div>
+
 				<div class="sidebar-pane" id="layers">
 					<div id="sidebar-layers">
 						<h3>Data to show</h3>
@@ -36,6 +46,7 @@
 					</div>
 				</div>
 
+
 				<div class="sidebar-pane" id="filter">
 					<div id="sidebar-filter">
 						<h3>Filter house prices</h3>
@@ -46,18 +57,15 @@
 					</div>
 				</div>
 
+
 			</div>
 		</div>
 
 		<div id="map" class="sidebar-map"></div>
 	</div>
 
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAex4St4qNjt9vUlMXGpouV6ttBCIMJfYE&libraries=places"></script>
-
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
-	<link rel="stylesheet" href="<%= global.base%>/sidebar/leaflet-sidebar.min.css">
 	<script src="<%= global.base%>/sidebar/leaflet-sidebar.min.js"></script>
 
 	<script src="<%= global.base%>/heatmap.min.js"></script>

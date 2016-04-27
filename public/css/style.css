@@ -958,3 +958,26 @@ button:active {
 .pac-logo::after {
   display: none;
 }
+.sidebar-tabs > li.active,
+.sidebar-tabs > ul > li.active {
+  background-color: #3b63cf;
+}
+.sidebar-pane {
+  padding: 0;
+}
+.sidebar {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.leaflet-bar {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}

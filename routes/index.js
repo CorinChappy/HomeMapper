@@ -7,12 +7,22 @@ router.get('/', function(req, res){
 });
 
 router.post('/', function(req, res){
-	console.log(req.body);
+	var loc = req.body.location;
+	if(loc != null && typeof loc === 'string'){
+		loc = loc.trim();
+
+		if(loc != ""){
+			return res.redirect('/map?location='+encodeURIComponent(loc));
+		}
+	}
 	res.render('index');
 });
 
 router.get('/map', function(req, res){
-	console.log("zfe");
+	var loc = req.query.location || "";
+	loc = decodeURIComponent(loc);
+
+	res.locals.location = loc;
 	res.render('map');
 });
 
