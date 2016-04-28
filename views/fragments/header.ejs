@@ -28,11 +28,11 @@
 	<div class="title">
 		<h1><a href="<%= global.base %>/"><img src="<%= global.base %>/img/24-white.png" alt="" /> <%= stg.title %></a></h1>
 	</div>
-	<div class="menu left">
-		<% displayMenu(menu) %>
-	</div>
 	<div class="menu">
-		<ul>
+		<label for="show-menu" class="show-menu"><i class="fa fa-bars"></i> Menu</label>
+		<input type="checkbox" id="show-menu" role="button">
+		<% displayMenu(menu) %>
+		<ul class="right">
 			<li><a href="#">Login</a></li>
 			<li><a href="#">Sign Up</a></li>
 		</ul>

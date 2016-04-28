@@ -30,12 +30,16 @@ header{
 	}
 
 	.menu{
-		float: right;
 
 		ul{
+			float: left;
 			position: relative;
 			padding: 0 @unit/2;
 			margin: 0;
+
+			&.right{
+				float: right;
+			}
 
 			li{
 				display: inline-block;
