@@ -1,4 +1,5 @@
 $(function() {
+    "use strict";
     /** Util functions **/
     function convertToGoogleLatLng(bounds){
         return {
@@ -10,7 +11,7 @@ $(function() {
     }
 
     function convertGoogleLocationToLatLng(loc){
-        return [loc.lat(), loc.lng()];
+        return L.latLng(loc.lat(), loc.lng());
     }
 
     function generatePointInBounds(bounds){
@@ -54,18 +55,17 @@ $(function() {
     });
 
     //location input panel
-    var input = $('#location_input').first();
-    var autocomplete = new google.maps.places.Autocomplete(input[0], {});
+    var input = $('#location_input').first(),
+        location = input.val().trim();
 
-    var geocoder = new google.maps.Geocoder();
+    var autocomplete = new google.maps.places.Autocomplete(input[0], {}),
+        geocoder = new google.maps.Geocoder();
 
-    if(input.val()!=""){
-        var location = input.val();
+    if(location && location !== ""){
         geocoder.geocode({ 'address': location }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                lat = results[0].geometry.location.lat();
-                lng = results[0].geometry.location.lng();
-                map.setView([lat, lng], zoom);
+                var loc = results[0].geometry.location;
+                map.setView(convertGoogleLocationToLatLng(loc), zoom);
             }
         });
     }
@@ -176,13 +176,11 @@ $(function() {
     ];
 
     var poiBaseLayer = L.layerGroup().addTo(map),
-        poiLayers = (function(){
-            var obj = {}
-            poiTypes.forEach(function(t){
-                obj[t] = L.layerGroup().addTo(poiBaseLayer);
-            });
-            return obj;
-        })();
+        poiLayers = {};
+        // Populate the layers, one for each POI type
+        poiTypes.forEach(function(t){
+            obj[t] = L.layerGroup().addTo(poiBaseLayer);
+        });
 
     // Add filter buttons
     poiTypes.forEach(function(type){
@@ -192,7 +190,7 @@ $(function() {
         var span = document.createElement("span"), 
             i = document.createElement("i");
 
-        var faName = markerSettings[type].options.icon
+        var faName = markerSettings[type].options.icon;
         i.className = "fa fa-" + faName;
         span.appendChild(i);
         span.appendChild(document.createTextNode(" " + type + ": "));
@@ -231,7 +229,7 @@ $(function() {
                 layer = poiLayers[type];
 
             if(purgeMarkers){
-                later.clearLayers();
+                layer.clearLayers();
             }
 
             var request = {
