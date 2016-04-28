@@ -212,7 +212,7 @@ $(function() {
 		home : L.AwesomeMarkers.icon({
 			prefix : "fa",
 			icon: "home",
-			markerColor: "orange"
+			markerColor: "purple"
 		}),
 		shop : L.AwesomeMarkers.icon({
 			prefix : "fa",
@@ -388,12 +388,17 @@ $(function() {
 		generatePoints : heatmap.generatePoints,
 	};
 
-	var marks_home = markers.generatePoints(300).forEach(function(m){
-		return L.marker(m, {icon : markerSettings.home}).bindPopup((function(){
-			return "Current owner: Stephen Redbridge<br>" +
-				"Asking price: " + m.value.toLocaleString("en-gb", { currency : "GBP", currencyDisplay : "symbol", style : "currency" });
-		})())//.addTo(map);
-	});
+	
+	var housingLayer = L.layerGroup().addTo(map);
+	function generateHousingMarkers(){
+		markers.generatePoints(50).forEach(function(m){
+			return L.marker(m, {icon : markerSettings.home}).bindPopup(
+				"Current owner: Stephen Redbridge<br>" +
+				"Asking price: " + m.value.toLocaleString("en-gb", { currency : "GBP", currencyDisplay : "symbol", style : "currency" })
+			).addTo(housingLayer);
+		});
+	}
+	generateHousingMarkers();
 
 
 });
