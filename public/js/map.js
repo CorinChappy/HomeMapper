@@ -1,6 +1,8 @@
 $(function() {
 	//location input panel
-	var input = $('#location_input').first();
+	var input	= $('#location_input').first();
+	var form	= $('#location_form').first();
+	var list 	= $('#location_list').first();
 	var autocomplete = new google.maps.places.Autocomplete(input[0], {});
 
 	var geocoder = new google.maps.Geocoder();
@@ -25,6 +27,42 @@ $(function() {
             }
 		});
 	}
+
+	google.maps.event.addListener(autocomplete, 'place_changed', function(){
+
+	});
+
+	form.submit(function(){
+		var location = input.val();
+		if(location != ""){
+			geocoder.geocode({ 'address': location }, function (results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					var loc = results[0];
+
+					var newloc =	$('<li>'+
+									'<span class="place" data-lat="'+loc.geometry.location.lat()+'" data-lng="'+loc.geometry.location.lng()+'"><i class="fa fa-map-marker fa-fw"></i> '+loc.formatted_address+'</span>'+
+									'<span class="remove"><i class="fa fa-ban fa-fw"></i></span>'+
+									'</li>');
+
+					newloc.find(".place").click(function(){
+						map.setView([$(this).data("lat"), $(this).data("lng")], 16);
+					});
+
+					newloc.find(".remove fa").click(function(){
+
+					});
+
+					list.append(newloc);
+
+					//add marker
+					L.marker([loc.geometry.location.lat(), loc.geometry.location.lng()], {icon : markers.types.user}).bindPopup("<strong>" + loc.formatted_address + "</strong>").addTo(map);
+	            }
+			});
+		}
+		input.val("");
+		input.focus();
+		return false;
+	});
 
 
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -108,6 +146,11 @@ $(function() {
 	    generatePoints : heatmap.generatePoints,
 
 	    types : {
+			user : L.AwesomeMarkers.icon({
+	            prefix : "fa",
+	            icon: "user",
+	            markerColor: "black"
+	        }),
 	        home : L.AwesomeMarkers.icon({
 	            prefix : "fa",
 	            icon: "home",

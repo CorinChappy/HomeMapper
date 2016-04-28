@@ -1,11 +1,65 @@
 //main:../style.less
 
-.sidebar-tabs > li.active, .sidebar-tabs > ul > li.active {
-    background-color: @accent;
+.sidebar-tabs > li, .sidebar-tabs > ul > li {
+    height: @unit*2-3;
+
+	a{
+		line-height: @unit*2-3;
+	}
+
+	&.active{
+		background-color: @accent;
+	}
 }
 
 .sidebar-pane {
 	padding: 0;
+
+	.padded{
+		padding: 0 @unit @unit @unit;
+		margin: 0;
+	}
+
+	.padded:first-child{
+		padding-top: @unit;
+	}
+
+	ul.places{
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		background-color: white;
+
+		li{
+			display: block;
+			padding: @unit/2 @unit*2 @unit/2 @unit/2;
+			position: relative;
+			.gradient(linear; rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.0));
+			.box-shadow(inset 0 -1px 0 rgba(0, 0, 0, 0.1));
+
+			.place{
+				cursor: pointer;
+			}
+
+			.remove{
+				position: absolute;
+				top: 0;
+				right: 0;
+				padding: @unit/2;
+				display: none;
+				.fa{
+					cursor: pointer;
+				}
+			}
+
+			&:hover{
+				.gradient(linear; rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.01));
+				.remove{
+					display: block;
+				}
+			}
+		}
+	}
 }
 
 .sidebar {

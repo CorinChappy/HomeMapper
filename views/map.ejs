@@ -18,10 +18,18 @@
 
 				<div class="sidebar-pane" id="locations">
 					<div id="sidebar-locations">
-						<div class="input-container">
-							<div class="icon"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i></div>
-							<input type="text" id="location_input" name="location" value="<%= location %>" placeholder="location">
-						</div>
+						<form id="location_form" method="post">
+							<div class="input-container">
+								<div class="icon"><i class="fa fa-map-marker fa-fw"></i></div>
+								<input type="text" class="wide" id="location_input" name="location" value="<%= location %>" placeholder="location">
+								<button type="submit" class="narrow" name="button"><i class="fa fa-plus fa-fw"></i> Add</button>
+							</div>
+						</form>
+
+						<h3 class="padded">Custom Markers</h3>
+						<ul class="places" id="location_list">
+
+						</ul>
 					</div>
 				</div>
 
