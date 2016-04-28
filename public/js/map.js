@@ -103,7 +103,7 @@ $(function() {
 					list.append(newloc);
 
 					//add marker
-					L.marker(convertGoogleLocationToLatLng(loc.geometry.location), {icon : markers.types.user}).bindPopup("<strong>" + loc.formatted_address + "</strong>").addTo(map);
+					L.marker(convertGoogleLocationToLatLng(loc.geometry.location), {icon : markerSettings.user}).bindPopup("<strong>" + loc.formatted_address + "</strong>").addTo(map);
 				}
 			});
 		}
@@ -184,6 +184,12 @@ $(function() {
 			prefix : "fa",
 			icon: "bus",
 			markerColor: "red"
+		}),
+
+		user : L.AwesomeMarkers.icon({
+			prefix : "fa",
+			icon: "user",
+			markerColor: "black"
 		}),
 
 		school : L.AwesomeMarkers.icon({
