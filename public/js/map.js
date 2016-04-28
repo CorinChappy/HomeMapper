@@ -289,18 +289,20 @@ $(function() {
 
 			nService.nearbySearch(request, function(results){
 				console.log(results);
-				results.forEach(function(result){
-					// Don't duplicate markers
-					if(allPoiIds.indexOf(result.id) < 0){
-						allPoiIds.push(result.id);
-						var l = result.geometry.location;
+				if(results){
+					results.forEach(function(result){
+						// Don't duplicate markers
+						if(allPoiIds.indexOf(result.id) < 0){
+							allPoiIds.push(result.id);
+							var l = result.geometry.location;
 
 
-						L.marker(convertGoogleLocationToLatLng(l), iconSettings)
-							.bindPopup("<strong>" + result.name + "</strong><br>" + type)
-							.addTo(layer);
-					}
-				});
+							L.marker(convertGoogleLocationToLatLng(l), iconSettings)
+								.bindPopup("<strong>" + result.name + "</strong><br>" + type)
+								.addTo(layer);
+						}
+					});
+				}
 			});
 		});
 	}
