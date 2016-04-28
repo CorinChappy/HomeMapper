@@ -196,9 +196,9 @@ $(function() {
 	});
 
 
-	heatmapLayer.setData({data: hmp, max : heatmap.max});
+	//heatmapLayer.setData({data: hmp, max : heatmap.max});
 
-	//map.addLayer(heatmapLayer);
+	map.addLayer(heatmapLayer);
 
 	// hmp.forEach(function(m){
 	//     L.marker(m).bindPopup("<pre>" + JSON.stringify(m, null, 2) + "</pre>").addTo(map);
@@ -343,23 +343,38 @@ $(function() {
 		});
 	}
 
+
+	function getPoliceData(){
+		$.ajax({
+			type : "POST",
+			url : "/data/police",
+			data : { bounds : JSON.stringify(convertBounds(map.getBounds())) },
+			dataType : 'json',
+			success : function(data){
+				var dd = data.results.map(function(d){
+					var coords = d.geom.coordinates;
+					return { lat : coords[1], lng : coords[0] };
+				});
+				heatmapLayer.setData({data: dd, max : heatmap.max});
+			}
+		});
+	}
+
 	map.on('moveend', function(){
 		getGooglePois();
+		getPoliceData();
 	});
 
 	getGooglePois();
+	getPoliceData();
 
-	$.ajax({
-		type : "POST",
-		url : "/data/police",
-		data : { bounds : JSON.stringify(convertBounds(map.getBounds())) },
-		dataType : 'json',
-		success : function(data){
-			console.log(data);
+	document.getElementById("heatmap_checkbox").addEventListener("change", function(){
+		if(this.checked){
+			map.addLayer(heatmapLayer);
+		}else{
+			map.removeLayer(heatmapLayer);
 		}
 	});
-
-
 
 
 
