@@ -10,7 +10,7 @@ var app = module.exports = express();
 var settings = require(__dirname+"/settings/settings.json");
 var menu = require(__dirname+"/settings/menu.json");
 
-var port = 8080;
+var port = process.argv[2] || 8080;
 
 
 //default
