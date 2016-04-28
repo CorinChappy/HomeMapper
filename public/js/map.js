@@ -30,6 +30,13 @@ $(function() {
 		return latlng;
 	}
 
+	function formatTypes(types){
+		if(types instanceof Array){
+			types = types.join(', ');
+		}
+		return types.replace('_', ' ');
+	}
+
 
 	var lat = 50.93519;
 	var lng = -1.39571; //[ 52.18935168521872, -2.2124576568603516 ],
@@ -60,8 +67,8 @@ $(function() {
 	var input = $('#location_input').first(),
 		location = input.val().trim();
 
-	var form    = $('#location_form').first();
-	var list    = $('#location_list').first();
+	var form	= $('#location_form').first();
+	var list	= $('#location_list').first();
 
 	var autocomplete = new google.maps.places.Autocomplete(input[0], {}),
 		geocoder = new google.maps.Geocoder();
@@ -80,6 +87,18 @@ $(function() {
 
 	});
 
+	var userPlacesLayer = L.layerGroup().addTo(map);
+	var userPlaces = {};
+	var generateUserLocations = function(){
+		userPlacesLayer.clearLayers();
+		for(var p in userPlaces){
+			var loc = userPlaces[p];
+			L.marker(convertGoogleLocationToLatLng(loc.geometry.location), {icon : markerSettings.user})
+				.bindPopup('<span class="popup-name">' + loc.formatted_address + '</span><span class="popup-type">custom location, '+formatTypes(loc.types)+'<span>')
+				.addTo(userPlacesLayer);
+		}
+	}
+
 	form.submit(function(){
 		location = input.val();
 		if(location && location != ""){
@@ -87,24 +106,32 @@ $(function() {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var loc = results[0];
 
-					var newloc =    $('<li>'+
-									'<span class="place" data-lat="'+loc.geometry.location.lat()+'" data-lng="'+loc.geometry.location.lng()+'"><i class="fa fa-map-marker fa-fw"></i> '+loc.formatted_address+'</span>'+
-									'<span class="remove"><i class="fa fa-ban fa-fw"></i></span>'+
-									'</li>');
+					if(!userPlaces[loc.formatted_address]){
+						userPlaces[loc.formatted_address] = loc;
 
-					newloc.find(".place").click(function(){
-						map.setView([$(this).data("lat"), $(this).data("lng")], 16);
-					});
+						var newloc =	$('<li data-location="'+loc.formatted_address+'">'+
+										'<span class="place" data-lat="'+loc.geometry.location.lat()+'" data-lng="'+loc.geometry.location.lng()+'"><i class="fa fa-map-marker fa-fw"></i> '+loc.formatted_address+'</span>'+
+										'<span class="remove"><i class="fa fa-ban fa-fw"></i></span>'+
+										'</li>');
 
-					newloc.find(".remove fa").click(function(){
+						newloc.find(".place").click(function(){
+							map.setView([$(this).data("lat"), $(this).data("lng")], 16);
+						});
 
-					});
+						newloc.find(".remove .fa").click(function(){
+							var item = $(this).parent().parent();
+							delete userPlaces[item.data("location")];
+							item.remove();
+							//update displayed places
+							generateUserLocations();
+						});
 
-					list.append(newloc);
-
-					//add marker
-					L.marker(convertGoogleLocationToLatLng(loc.geometry.location), {icon : markerSettings.user}).bindPopup("<strong>" + loc.formatted_address + "</strong>").addTo(map);
+						list.append(newloc);
+					}
 				}
+
+				//update displayed places
+				generateUserLocations();
 			});
 		}
 		input.val("");
@@ -208,10 +235,10 @@ $(function() {
 			markerColor: "orange"
 		})
 
-		
+
 	};
 
-	var filterElement = document.querySelector("#sidebar-layers>div");
+	var filterElement = $("#sidebar-filter");
 
 
 	var nService = new google.maps.places.PlacesService(document.createElement("div"));
@@ -235,43 +262,35 @@ $(function() {
 	// Add filter buttons
 	poiTypes.forEach(function(type){
 		var layer = poiLayers[type],
-			p = document.createElement("p");
-		
-		var span = document.createElement("span"), 
-			i = document.createElement("i");
+			container = $(
+				'<div class="input-container">'+
+				'<label for="'+type+'_checkbox">'+type+'</label>'+
+				'<div class="icon"><i class="fa fa-'+markerSettings[type].options.icon+'"></i></div>'+
+				'</div>'),
+			checkbox = $('<input id="'+type+'_checkbox" type="checkbox" checked>');
 
-		var faName = markerSettings[type].options.icon;
-		i.className = "fa fa-" + faName;
-		span.appendChild(i);
-		span.appendChild(document.createTextNode(" " + type + ": "));
-		
-		var inp = document.createElement("input");
-		inp.type = "checkbox";
-		inp.checked = "true";
-		inp.addEventListener("change", function(){
-			if(this.checked){
+		checkbox.on("change", function(){
+			if($(this).is(':checked')){
 				poiBaseLayer.addLayer(layer);
 			}else{
 				poiBaseLayer.removeLayer(layer);
 			}
 		});
 
-		p.appendChild(span);
-		p.appendChild(inp);
-
-		filterElement.appendChild(p);
+		container.prepend(checkbox);
+		filterElement.append(container);
 	});
 
 
 	function getGooglePois(){
 		var bounds = convertToGoogleLatLng(map.getBounds()),
 			purgeMarkers = false;
-		
+
 		// If the number of markers is too large, purge them and start again
 		// So we don't explode memory usage
 		if(allPoiIds.length > 1000){
 			allPoiIds = [];
-		} 
+		}
 
 
 		poiTypes.forEach(function(type){
@@ -288,7 +307,7 @@ $(function() {
 			};
 
 			nService.nearbySearch(request, function(results){
-				console.log(results);
+				//console.log(results);
 				if(results){
 					results.forEach(function(result){
 						// Don't duplicate markers
@@ -298,7 +317,7 @@ $(function() {
 
 
 							L.marker(convertGoogleLocationToLatLng(l), iconSettings)
-								.bindPopup("<strong>" + result.name + "</strong><br>" + type)
+								.bindPopup('<span class="popup-name">' + result.name + '</span><span class="popup-type">' + formatTypes(type) + '</span>')
 								.addTo(layer);
 						}
 					});

@@ -323,7 +323,8 @@ form {
 input,
 .input,
 textarea,
-select {
+select,
+label {
   border: 0 none;
   display: block;
   width: 100%;
@@ -335,7 +336,8 @@ select {
 input.rounded,
 .input.rounded,
 textarea.rounded,
-select.rounded {
+select.rounded,
+label.rounded {
   -webkit-border-radius: 50px;
   -moz-border-radius: 50px;
   border-radius: 50px;
@@ -346,17 +348,20 @@ select.rounded {
 input:focus,
 .input:focus,
 textarea:focus,
-select:focus {
+select:focus,
+label:focus {
   color: #3e4358;
 }
 input.disabled,
 .input.disabled,
 textarea.disabled,
 select.disabled,
+label.disabled,
 input:disabled,
 .input:disabled,
 textarea:disabled,
-select:disabled {
+select:disabled,
+label:disabled {
   color: #868ca9;
 }
 [type="checkbox"] {
@@ -366,6 +371,9 @@ select:disabled {
 }
 textarea {
   resize: vertical;
+}
+label {
+  text-transform: capitalize;
 }
 .input-container {
   position: relative;
@@ -377,7 +385,8 @@ textarea {
 .input-container input,
 .input-container textarea,
 .input-container select,
-.input-container .input {
+.input-container .input,
+.input-container label {
   margin-bottom: 0;
   padding-left: 46px;
 }
@@ -389,7 +398,33 @@ textarea {
   padding: 12.5px;
   color: #a3a9bf;
 }
-.input-container .wide {
+.input-container label {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.input-container input[type="checkbox"] {
+  display: none;
+}
+.input-container input[type="checkbox"] + label:after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12.5px;
+  content: "\f00d";
+  font-family: "FontAwesome";
+}
+.input-container input[type="checkbox"]:checked + label:after {
+  background-color: #3b63cf;
+  color: white;
+  content: "\f00c";
+}
+.input-container .wide,
+.input-container label {
   flex: 1 1 auto;
 }
 .input-container .narrow {
@@ -1047,4 +1082,12 @@ button:active {
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
+}
+.popup-name {
+  display: block;
+  font-weight: bold;
+}
+.popup-type {
+  display: block;
+  text-transform: capitalize;
 }

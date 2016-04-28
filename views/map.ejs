@@ -7,10 +7,10 @@
 		<div id="sidebar" class="sidebar collapsed">
 			<!-- Nav -->
 			<ul class="sidebar-tabs" role="tablist">
-				<li><a href="#locations" role="tab"><span class="fa fa-fw fa-map-marker">&nbsp;</span></a></li>
-				<li><a href="#layers" role="tab"><span class="fa fa-fw fa-database">&nbsp;</span></a></li>
-				<li><a href="#filter" role="tab"><span class="fa fa-fw fa-filter">&nbsp;</span></a></li>
-				<li><a href="#money" role="tab"><span class="fa fa-fw fa-money">&nbsp;</span></a></li>
+				<li><a href="#locations"	title="Custom Locations" role="tab"><i class="fa fa-fw fa-map-marker"></i></a></li>
+				<li><a href="#layers"		title="Data Heatmap" role="tab"><i class="fa fa-fw fa-database"></i></a></li>
+				<li><a href="#filter"		title="Surounding Places" role="tab"><i class="fa fa-fw fa-filter"></i></a></li>
+				<li><a href="#house"		title="House Specifications" role="tab"><i class="fa fa-fw fa-home"></i></a></li>
 			</ul>
 
 			<!-- Pane -->
@@ -26,7 +26,7 @@
 							</div>
 						</form>
 
-						<h3 class="padded">Custom Markers</h3>
+						<h3 class="padded">Custom Locations</h3>
 						<ul class="places" id="location_list">
 
 						</ul>
@@ -34,18 +34,25 @@
 				</div>
 
 				<div class="sidebar-pane" id="layers">
-					<div id="sidebar-layers">
-						<h3>Data to show</h3>
-						<p>
-							<i class="fa fa-map-o"></i> Heatmap: <input type="checkbox" checked>
-						</p>
-						<div></div>
+					<div class="padded" id="sidebar-layers">
+						<h3>Data heatmaps to show</h3>
+						<div class="input-container">
+							<input id="heatmap_checkbox" type="checkbox" checked>
+							<label for="heatmap_checkbox">Heatmap</label>
+							<div class="icon"><i class="fa fa-map-o"></i></div>
+						</div>
 					</div>
 				</div>
 
 
 				<div class="sidebar-pane" id="filter">
-					<div id="sidebar-filter">
+					<div class="padded" id="sidebar-filter">
+						<h3>Filter the places shown</h3>
+					</div>
+				</div>
+
+				<div class="sidebar-pane" id="house">
+					<div class="padded" id="sidebar-filter">
 						<h3>Filter house prices</h3>
 						<p style="text-align: center;">
 							 <input type="range" min="100000" max="700000" value="100000">

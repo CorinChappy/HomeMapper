@@ -6,7 +6,7 @@ form{
 	padding: 0;
 	margin: 0;
 }
-input, .input, textarea, select{
+input, .input, textarea, select, label{
 	border: 0 none;
 	display: block;
 	width: 100%;
@@ -37,13 +37,17 @@ textarea{
 	resize: vertical;
 }
 
+label{
+	text-transform: capitalize;
+}
+
 .input-container{
 	position: relative;
 	margin: 0 0 @unit 0;
 	display: flex;
 	flex-flow: row;
 
-	button, input, textarea, select, .input{
+	button, input, textarea, select, .input, label{
 		margin-bottom: 0;
 		padding-left: @unit*1 + 21px;
 	}
@@ -56,7 +60,30 @@ textarea{
 		color: lighten(@input, 40);
 	}
 
-	.wide{
+	label{
+		cursor: pointer;
+		.user-select(none);
+	}
+	input[type="checkbox"]{
+		display: none;
+	}
+	input[type="checkbox"] + label:after {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		padding: @unit/2;
+		content: "\f00d";
+		font-family: "FontAwesome";
+	}
+
+	input[type="checkbox"]:checked + label:after {
+		background-color: @accent;
+		color: white;
+		content: "\f00c";
+	}
+
+	.wide, label{
 		flex: 1 1 auto;
 	}
 
