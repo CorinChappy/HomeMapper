@@ -4,9 +4,9 @@
 		return pattern.test(url);
 	}
 
-    var displayMenu = function(menu){
+    var displayMenu = function(menu, cls){
         if(menu!==undefined || menu.constructor === Array){
-            %><ul><%
+            %><ul class="<%- cls || "" %>"><%
                 for(var i=0; i<menu.length; i++) {
 					var url		= isLink(menu[i].link)	? menu[i].link : global.base+menu[i].link;
 					var cls		= (menu[i].class!=null)	? menu[i].class : '';
@@ -32,9 +32,6 @@
 		<label for="show-menu" class="show-menu"><i class="fa fa-bars"></i> Menu</label>
 		<input type="checkbox" id="show-menu" role="button">
 		<% displayMenu(menu) %>
-		<ul class="right">
-			<li><a href="<%= global.base %>/login">Login</a></li>
-			<li><a href="<%= global.base %>/signup">Sign Up</a></li>
-		</ul>
+		<% displayMenu(usermenu, "right") %>
 	</div>
 </header>

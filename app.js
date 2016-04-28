@@ -23,7 +23,6 @@ app.use(function(req, res, next){
 	};
 
 	res.locals.stg = settings;
-	res.locals.menu = menu;
 	next();
 });
 
@@ -62,10 +61,25 @@ mongoose.connection.once('open', function() {
 	console.log("DB connection established");
 });
 
-
 //parser for post messages
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+//menu
+app.use(function(req, res, next){
+	res.locals.usermenu = [
+		{"label" : "Login", "link" : "/login"},
+		{"label" : "Sign Up", "link" : "/signup"}
+	];
+	if(req.Auth.isLogged()){
+		res.locals.usermenu = [
+			{"label" : "Account", "link" : "/account"},
+			{"label" : "Logout", "link" : "/logout"}
+		];
+	}
+	res.locals.menu = menu;
+	next();
+});
 
 //set the view engine to ejs with ejs mate
 app.engine('ejs', engine);
