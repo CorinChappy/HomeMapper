@@ -1,0 +1,19 @@
+<% layout("layouts/default") %>
+<%- Notifications() %>
+<div class="content">
+	<div class="page">
+		<h2>Hi <%= user.name || user.username %></h2>
+		<div class="input-container">
+			<div class="icon"><i class="fa fa-user fa-fw"></i></div>
+			<input type="text" name="username" disabled="disabled" value="<%= user.username || "" %>" placeholder="No Username">
+		</div>
+		<div class="input-container">
+			<div class="icon"><i class="fa fa-tag fa-fw"></i></div>
+			<input type="text" name="name" disabled="disabled" value="<%= user.name || "" %>" placeholder="No Name">
+		</div>
+		<div class="input-container">
+			<div class="icon"><i class="fa fa-envelope fa-fw"></i></div>
+			<input type="text" name="email" disabled="disabled" value="<%= user.email || "" %>" placeholder="No Email">
+		</div>
+	</div>
+</div>

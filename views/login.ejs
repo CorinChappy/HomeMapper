@@ -1,0 +1,19 @@
+<% layout("layouts/default") %>
+<div class="content centered">
+	<div class="box focusbox">
+		<h2>Login</h2>
+		<%- Notifications() %>
+		<form method="post">
+			<div class="input-container">
+				<div class="icon"><i class="fa fa-user fa-fw"></i></div>
+				<input type="text" name="username" value="<%= (form.username) || '' %>" placeholder="Username">
+			</div>
+			<div class="input-container">
+				<div class="icon"><i class="fa fa-unlock-alt fa-fw"></i></div>
+				<input type="password" name="password" value="" placeholder="Password">
+			</div>
+			<button type="submit" class="full">Login</button>
+		</form>
+		<p class="align-right">Don't have an account yet? - <a href="signup">Signup here</a></p>
+	</div>
+</div>

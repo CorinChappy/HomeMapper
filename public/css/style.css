@@ -363,6 +363,10 @@ input:disabled,
 textarea:disabled,
 select:disabled,
 label:disabled {
+  background: white;
+  -webkit-box-shadow: inset 0 0 0 1px #e1e4f0;
+  -moz-box-shadow: inset 0 0 0 1px #e1e4f0;
+  box-shadow: inset 0 0 0 1px #e1e4f0;
   color: #868ca9;
 }
 [type="checkbox"] {
@@ -381,6 +385,9 @@ label {
   margin: 0 0 25px 0;
   display: flex;
   flex-flow: row;
+}
+.input-container.staked {
+  flex-flow: column;
 }
 .input-container button,
 .input-container input,

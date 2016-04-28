@@ -30,6 +30,39 @@ app.use(function(req, res, next){
 //local dir
 app.use(express.static(__dirname+'/public'));
 
+//use session
+var sess = session(require(__dirname+'/settings/session.json'));
+app.use(sess);
+
+//use notifications
+var notifications = require(__dirname+'/helpers/session-notification');
+app.use(notifications({
+	max : 10,
+	types : ["info", "warning", "error", "success"],
+	template : "notifications"
+}));
+
+//use protection
+var protection = require(__dirname+'/helpers/session-protection');
+app.use(protection({}));
+
+//auth
+var authentication = require(__dirname+'/helpers/session-authentication');
+var auth = authentication({});
+app.use(auth);
+
+//use validation
+var validator = require(__dirname+'/helpers/validator');
+app.use(validator({}));
+
+//database
+mongoose.connect('mongodb://localhost/homemapper');
+mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
+mongoose.connection.once('open', function() {
+	console.log("DB connection established");
+});
+
+
 //parser for post messages
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -40,7 +73,9 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname+'/views');
 
 // Routes
+app.use('/', require(__dirname+'/routes/user'));
 app.use('/', require(__dirname+'/routes/index'));
+app.use('/account', require(__dirname+'/routes/account'));
 
 
 //if called directly, start server
