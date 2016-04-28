@@ -11,5 +11,8 @@
     "mongodb": "^2.1.18",
     "mongoose": "^4.3.7",
     "yargs": "^4.6.0"
-  }
+  },
+  "hosts": [
+    "homemapper.repraze.com"
+  ]
 }
