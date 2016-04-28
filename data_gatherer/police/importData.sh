@@ -1,0 +1,1 @@
+find data -type f -exec node police.js -v {} \;
