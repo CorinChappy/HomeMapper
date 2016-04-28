@@ -10,8 +10,25 @@ $(function() {
 		};
 	}
 
+
+
 	function convertGoogleLocationToLatLng(loc){
 		return L.latLng(loc.lat(), loc.lng());
+	}
+
+	// A function to convert an object from lnglat to an array
+	function llToGeoJsonArray(i){
+	    return [i.lng, i.lat];
+	}
+	// Function to get a geojson coordinate array from bounds
+	function convertBounds(bounds){
+	    return [
+	        llToGeoJsonArray(bounds.getNorthEast()),
+	        llToGeoJsonArray(bounds.getNorthWest()),
+	        llToGeoJsonArray(bounds.getSouthWest()),
+	        llToGeoJsonArray(bounds.getSouthEast()),
+	        llToGeoJsonArray(bounds.getNorthEast())
+	    ];
 	}
 
 	function generatePointInBounds(bounds){
@@ -331,6 +348,17 @@ $(function() {
 	});
 
 	getGooglePois();
+
+	$.ajax({
+		type : "POST",
+		url : "/data/police",
+		data : { bounds : JSON.stringify(convertBounds(map.getBounds())) },
+		dataType : 'json',
+		success : function(data){
+			console.log(data);
+		}
+	});
+
 
 
 

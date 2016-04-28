@@ -91,6 +91,8 @@ app.use('/', require(__dirname+'/routes/user'));
 app.use('/', require(__dirname+'/routes/index'));
 app.use('/account', require(__dirname+'/routes/account'));
 
+app.use('/data', require(__dirname+'/routes/police'));
+
 
 //if called directly, start server
 if(require.main === module){
