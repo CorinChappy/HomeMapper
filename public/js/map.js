@@ -70,6 +70,9 @@ $(function() {
         });
     }
 
+
+
+    /*** Heatmap generation ***/
     var heatmap = {
         max : 100,
         min : 0,
@@ -113,6 +116,10 @@ $(function() {
     //     L.marker(m).bindPopup("<pre>" + JSON.stringify(m, null, 2) + "</pre>").addTo(map);
     //})
 
+
+
+
+    // AwesomeMarker settings for the markers
     var markerSettings = {
         home : L.AwesomeMarkers.icon({
             prefix : "fa",
@@ -152,23 +159,9 @@ $(function() {
         })
 
         
-    }
-
-    var markers = {
-        min : 100000,
-        max : 700000,
-        getValue : heatmap.getValue,
-        getPosition : heatmap.getPosition,
-        generatePoint : heatmap.generatePoint,
-        generatePoints : heatmap.generatePoints,
     };
 
-    var marks_home = markers.generatePoints(300).forEach(function(m){
-        return L.marker(m, {icon : markerSettings.home}).bindPopup((function(){
-            return "Current owner: Stephen Redbridge<br>" +
-                "Asking price: " + m.value.toLocaleString("en-gb", { currency : "GBP", currencyDisplay : "symbol", style : "currency" });
-        })())//.addTo(map);
-    });
+    var filterElement = document.querySelector("#sidebar-layers>div");
 
 
     var nService = new google.maps.places.PlacesService(document.createElement("div"));
@@ -191,8 +184,38 @@ $(function() {
             return obj;
         })();
 
+    // Add filter buttons
+    poiTypes.forEach(function(type){
+        var layer = poiLayers[type],
+            p = document.createElement("p");
+        
+        var span = document.createElement("span"), 
+            i = document.createElement("i");
 
-    function abc(){
+        var faName = markerSettings[type].options.icon
+        i.className = "fa fa-" + faName;
+        span.appendChild(i);
+        span.appendChild(document.createTextNode(" " + type + ": "));
+        
+        var inp = document.createElement("input");
+        inp.type = "checkbox";
+        inp.checked = "true";
+        inp.addEventListener("change", function(){
+            if(this.checked){
+                poiBaseLayer.addLayer(layer);
+            }else{
+                poiBaseLayer.removeLayer(layer);
+            }
+        });
+
+        p.appendChild(span);
+        p.appendChild(inp);
+
+        filterElement.appendChild(p);
+    });
+
+
+    function getGooglePois(){
         var bounds = convertToGoogleLatLng(map.getBounds()),
             purgeMarkers = false;
         
@@ -235,10 +258,32 @@ $(function() {
     }
 
     map.on('moveend', function(){
-        abc();
+        getGooglePois();
     });
 
-    abc();
+    getGooglePois();
+
+
+
+
+    /*** Generate random housing markers ***/
+    var markers = {
+        min : 100000,
+        max : 700000,
+        getValue : heatmap.getValue,
+        getPosition : heatmap.getPosition,
+        generatePoint : heatmap.generatePoint,
+        generatePoints : heatmap.generatePoints,
+    };
+
+    var marks_home = markers.generatePoints(300).forEach(function(m){
+        return L.marker(m, {icon : markerSettings.home}).bindPopup((function(){
+            return "Current owner: Stephen Redbridge<br>" +
+                "Asking price: " + m.value.toLocaleString("en-gb", { currency : "GBP", currencyDisplay : "symbol", style : "currency" });
+        })())//.addTo(map);
+    });
+
+
 });
 
 /*
