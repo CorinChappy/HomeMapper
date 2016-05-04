@@ -51,7 +51,7 @@ $(function() {
 		if(types instanceof Array){
 			types = types.join(', ');
 		}
-		return types.replace('_', ' ');
+		return types.replace(/_/g, ' ');
 	}
 
 
@@ -110,47 +110,64 @@ $(function() {
 		userPlacesLayer.clearLayers();
 		for(var p in userPlaces){
 			var loc = userPlaces[p];
-			L.marker(convertGoogleLocationToLatLng(loc.geometry.location), {icon : markerSettings.user})
-				.bindPopup('<span class="popup-name">' + loc.formatted_address + '</span><span class="popup-type">custom location, '+formatTypes(loc.types)+'<span>')
+			L.marker([loc.lat, loc.lng], {icon : markerSettings.user})
+				.bindPopup('<span class="popup-name">' + loc.address + '</span><span class="popup-type">custom location, '+formatTypes(loc.types)+'<span>')
 				.addTo(userPlacesLayer);
 		}
 	}
 
-	form.submit(function(){
-		location = input.val();
+	function addUserPlace(address, lat, lng, types){
+		if(!userPlaces[address]){
+			userPlaces[address] = {
+				address : address,
+				lat : lat,
+				lng : lng,
+				types : types
+			};
+
+			var newloc =	$('<li data-location="'+address+'">'+
+							'<span class="place" data-lat="'+lat+'" data-lng="'+lng+'"><i class="fa fa-map-marker fa-fw"></i> '+address+'</span>'+
+							'<span class="remove"><i class="fa fa-ban fa-fw"></i></span>'+
+							'</li>');
+
+			newloc.find(".place").click(function(){
+				map.setView([$(this).data("lat"), $(this).data("lng")], 16);
+			});
+
+			newloc.find(".remove .fa").click(function(){
+				var item = $(this).parent().parent();
+				delete userPlaces[item.data("location")];
+				item.remove();
+				//update displayed places
+				generateUserLocations();
+			});
+
+			list.append(newloc);
+
+
+			generateUserLocations();
+		}
+
+	}
+
+
+	function geocodeUserPlace(location){
 		if(location && location != ""){
 			geocoder.geocode({ address : location }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var loc = results[0];
-
-					if(!userPlaces[loc.formatted_address]){
-						userPlaces[loc.formatted_address] = loc;
-
-						var newloc =	$('<li data-location="'+loc.formatted_address+'">'+
-										'<span class="place" data-lat="'+loc.geometry.location.lat()+'" data-lng="'+loc.geometry.location.lng()+'"><i class="fa fa-map-marker fa-fw"></i> '+loc.formatted_address+'</span>'+
-										'<span class="remove"><i class="fa fa-ban fa-fw"></i></span>'+
-										'</li>');
-
-						newloc.find(".place").click(function(){
-							map.setView([$(this).data("lat"), $(this).data("lng")], 16);
-						});
-
-						newloc.find(".remove .fa").click(function(){
-							var item = $(this).parent().parent();
-							delete userPlaces[item.data("location")];
-							item.remove();
-							//update displayed places
-							generateUserLocations();
-						});
-
-						list.append(newloc);
-					}
+					addUserPlace(loc.formatted_address, loc.geometry.location.lat(), loc.geometry.location.lng(), loc.types);
 				}
-
-				//update displayed places
-				generateUserLocations();
 			});
 		}
+	}
+
+
+	form.submit(function(e){
+		e.preventDefault();
+		location = input.val();
+		geocodeUserPlace(location);
+
 		input.val("");
 		input.focus();
 		return false;
@@ -332,9 +349,21 @@ $(function() {
 							allPoiIds.push(result.id);
 							var l = result.geometry.location;
 
+							var container = document.createElement("div");
+							var text = '<span class="popup-name">' + result.name + '</span><span class="popup-type">' + formatTypes(type) + '</span><br>';
+							var addToCustom = document.createElement("a");
+								addToCustom.href = "#";
+								addToCustom.addEventListener("click", function(e){
+									e.preventDefault();
+									addUserPlace(result.name, result.geometry.location.lat(), result.geometry.location.lng(), result.types);
+								});
+								addToCustom.innerHTML = "Add as custom place";
+
+							container.innerHTML = text;
+							container.appendChild(addToCustom);
 
 							L.marker(convertGoogleLocationToLatLng(l), iconSettings)
-								.bindPopup('<span class="popup-name">' + result.name + '</span><span class="popup-type">' + formatTypes(type) + '</span>')
+								.bindPopup(container)
 								.addTo(layer);
 						}
 					});
