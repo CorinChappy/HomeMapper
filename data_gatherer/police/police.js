@@ -1,10 +1,4 @@
-/*
 
-	Application to gather data from the NAPTAN's Rail References Data set into a database of rail stations (MongoDB)
-
-	Author: Corin Chaplin
-
-*/
 
 var argv = 	require('yargs')
 			.demand(1, "File name required")
