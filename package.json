@@ -10,6 +10,7 @@
     "express-session": "^1.13.0",
     "mongodb": "^2.1.18",
     "mongoose": "^4.3.7",
+    "prompt": "^1.0.0",
     "yargs": "^4.6.0"
   },
   "hosts": [

@@ -156,6 +156,27 @@ p, ul, ol, blockquote, code{
 	& > *:last-child{
 		margin-bottom: 0;
 	}
+
+	img{
+		max-width: 100%;
+	}
+}
+
+.marged{
+	margin: @unit;
+}
+.padded{
+	padding: @unit;
+}
+
+.profile{
+	margin: 0 auto;
+	width: 200px;
+	height: 200px;
+	.border-radius(50%);
+	.box-shadow(0 3px 5px 0 rgba(0, 0, 0, 0.10));
+	padding: @unit/4;
+	background: white;
 }
 
 .page{

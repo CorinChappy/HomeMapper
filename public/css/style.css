@@ -200,6 +200,31 @@ code {
 .box > *:last-child {
   margin-bottom: 0;
 }
+.box img {
+  max-width: 100%;
+}
+.marged {
+  margin: 25px;
+}
+.padded {
+  padding: 25px;
+}
+.profile {
+  margin: 0 auto;
+  width: 200px;
+  height: 200px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 6.25px;
+  background: white;
+}
 .page {
   display: block;
   background: white;
@@ -227,6 +252,9 @@ code {
 }
 .page > *:last-child {
   margin-bottom: 0;
+}
+.page img {
+  max-width: 100%;
 }
 #homemap {
   position: absolute;
