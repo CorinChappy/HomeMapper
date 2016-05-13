@@ -1,0 +1,9 @@
+To run the code:
+
+- Make sure that MonogBD, Nodejs and NPM are all installed.
+- On the command line enter the directory and run `npm install` to install the dependencies.
+- Navigate to 'data_gatherer/police'.
+- Make sure the file 'importData.sh' is executable (`chmod +x importData.sh`).
+- Run 'importData.sh' (`./importData.sh`) to load the crime data into the database. This may take some time so please be patient.
+- Return to the root directory and run `node app.js` to start the server.
+- Navigate to http://localhost:8080 to use the application.
